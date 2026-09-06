@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nightline &mdash; NYC Listing Predictor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="skyline" aria-hidden="true">
+    <svg id="skylineSvg" viewBox="0 0 1600 260" preserveAspectRatio="none">
+      <!-- buildings injected by JS -->
+    </svg>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">N</span>
+      <span class="brand-name">Nightline</span>
+    </div>
+    <div class="api-config">
+      <label for="apiBase">API base</label>
+      <input type="text" id="apiBase" value="http://127.0.0.1:8000" spellcheck="false" />
+      <span class="status-dot" id="statusDot" title="Not checked yet"></span>
+    </div>
+  </header>
+
+  <main class="layout">
+
+    <section class="panel form-panel">
+      <h1>Read the listing<br/>before the guest does.</h1>
+      <p class="lede">Enter a listing's details below. The model behind this form was trained on New York City short‑term rental data &mdash; it looks at location, price, and host history to size up how the listing behaves.</p>
+
+      <form id="predictForm" novalidate>
+
+        <div class="field-grid">
+
+          <div class="field">
+            <label for="neighbourhood_group">Borough</label>
+            <select id="neighbourhood_group" required>
+              <option value="" disabled selected>Choose a borough</option>
+              <option>Manhattan</option>
+              <option>Brooklyn</option>
+              <option>Queens</option>
+              <option>Bronx</option>
+              <option>Staten Island</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="neighbourhood">Neighbourhood</label>
+            <input type="text" id="neighbourhood" placeholder="e.g. Williamsburg" required list="neighbourhoodList" autocomplete="off" />
+            <datalist id="neighbourhoodList"></datalist>
+          </div>
+
+          <div class="field">
+            <label for="latitude">Latitude</label>
+            <input type="number" id="latitude" step="0.000001" min="-90" max="90" placeholder="40.712776" required />
+          </div>
+
+          <div class="field">
+            <label for="longitude">Longitude</label>
+            <input type="number" id="longitude" step="0.000001" min="-180" max="180" placeholder="-74.005974" required />
+          </div>
+
+          <div class="field">
+            <label for="price">Nightly price (USD)</label>
+            <input type="number" id="price" step="1" min="1" placeholder="150" required />
+          </div>
+
+          <div class="field">
+            <label for="minimum_nights">Minimum nights</label>
+            <input type="number" id="minimum_nights" step="1" min="1" max="365" placeholder="3" required />
+          </div>
+
+          <div class="field">
+            <label for="number_of_reviews">Total reviews</label>
+            <input type="number" id="number_of_reviews" step="1" min="0" placeholder="24" required />
+          </div>
+
+          <div class="field">
+            <label for="reviews_per_month">Reviews / month</label>
+            <input type="number" id="reviews_per_month" step="0.01" min="0" placeholder="1.4" required />
+          </div>
+
+          <div class="field">
+            <label for="calculated_host_listings_count">Host's total listings</label>
+            <input type="number" id="calculated_host_listings_count" step="1" min="0" placeholder="2" required />
+          </div>
+
+          <div class="field">
+            <label for="availability_365">Available days / year</label>
+            <input type="number" id="availability_365" step="1" min="0" max="365" placeholder="180" required />
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" id="submitBtn">
+            <span class="btn-label">Run prediction</span>
+            <span class="btn-spinner" aria-hidden="true"></span>
+          </button>
+          <button type="button" id="sampleBtn" class="ghost-btn">Fill sample listing</button>
+        </div>
+
+        <p class="error-banner" id="errorBanner" role="alert" hidden></p>
+
+      </form>
+    </section>
+
+    <section class="panel result-panel">
+      <div class="result-empty" id="resultEmpty">
+        <div class="pulse-dot"></div>
+        <p>Waiting for a listing to evaluate.</p>
+        <p class="hint">Fill the form and run a prediction &mdash; the read‑out appears here.</p>
+      </div>
+
+      <div class="result-body" id="resultBody" hidden>
+        <span class="result-eyebrow">Model read‑out</span>
+        <h2 id="resultClass">&mdash;</h2>
+
+        <div class="confidence-block">
+          <div class="confidence-labels">
+            <span>Confidence</span>
+            <span id="confidenceValue">0%</span>
+          </div>
+          <div class="confidence-track">
+            <div class="confidence-fill" id="confidenceFill"></div>
+          </div>
+        </div>
+
+        <div class="prob-bars" id="probBars"></div>
+
+        <div class="result-footer">
+          <span id="timestamp"></span>
+          <button type="button" id="resetBtn" class="ghost-btn small">Clear</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="page-footer">
+    Model served from your local FastAPI instance &middot; predictions run entirely on your machine
+  </footer>
+
+<script src="script.js"></script>
+</body>
+</html>
