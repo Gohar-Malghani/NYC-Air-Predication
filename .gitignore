@@ -1,13 +1,159 @@
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.venv/
-venv/
-.env
-.env.*
-.DS_Store
-.idea/
-.vscode/
-*.log
-Model_Pipline.pkl
+# NYC Air Predication
+
+A polished NYC short-term rental prediction app that combines a machine-learning model with a clean dashboard interface. The project lets users input listing attributes like borough, price, neighborhood, and host history, and then receive a prediction with confidence scores from a live FastAPI backend.
+
+![NYC skyline preview](https://images.unsplash.com/photo-1499092346589-b9b6be3e94b73?auto=format&fit=crop&w=1400&q=80)
+
+## Overview
+
+This project demonstrates a practical end-to-end ML workflow:
+- A Python + scikit-learn model generates predictions
+- A FastAPI service exposes the trained pipeline
+- A lightweight web dashboard visualizes the result in real time
+
+The app is designed for local use and portfolio presentation, making it easy to run and showcase.
+
+## Features
+
+- NYC listing prediction from structured listing attributes
+- Borough and neighborhood-aware form input
+- FastAPI health checks and prediction endpoint
+- Real-time confidence and probability breakdown
+- Dark, modern dashboard styling for a more professional look
+- Easy local setup for demo and experimentation
+
+## Project Preview
+
+![Dashboard interface](https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=80)
+
+![Airbnb-style listing analytics](https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1400&q=80)
+
+## Tech Stack
+
+- Python
+- FastAPI
+- Pandas
+- scikit-learn
+- Joblib
+- HTML
+- CSS
+- JavaScript
+
+## Repository Structure
+
+```text
+NYC-Air-Predication/
+├── main.py                 # FastAPI API and model endpoint
+├── Model_Pipline.pkl      # Serialized trained ML pipeline
+├── index.html              # Frontend dashboard UI
+├── script.js              # Frontend logic and API calls
+├── style.css              # Dashboard styling and layout
+├── requirements.txt       # Python dependencies
+├── README.md              # Project documentation
+├── .gitignore             # Generated files and local environment exclusions
+└── __pycache__/           # Python cache files
+```
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Gohar-Malghani/NYC-Air-Predication.git
+cd NYC-Air-Predication
+```
+
+### 2. Create a virtual environment
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+# Windows: .venv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Run the API
+
+```bash
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+The app will be available at:
+- API docs: http://127.0.0.1:8000/docs
+- Health check: http://127.0.0.1:8000/health
+- Prediction endpoint: http://127.0.0.1:8000/predict
+
+### 5. Open the frontend
+
+Open `index.html` directly in the browser, or serve it locally:
+
+```bash
+python -m http.server 8080
+```
+
+Then visit:
+
+```text
+http://127.0.0.1:8080
+```
+
+## Example API Request
+
+```json
+{
+  "latitude": 40.7128,
+  "longitude": -73.9352,
+  "price": 180,
+  "minimum_nights": 2,
+  "number_of_reviews": 24,
+  "reviews_per_month": 1.75,
+  "calculated_host_listings_count": 1,
+  "availability_365": 200,
+  "neighbourhood_group": "Brooklyn",
+  "neighbourhood": "Williamsburg"
+}
+```
+
+Example response:
+
+```json
+{
+  "prediction": 1,
+  "probability": [[0.12, 0.26, 0.62]]
+}
+```
+
+## Model Behavior
+
+The model uses listing features such as:
+- location and borough
+- nightly price
+- minimum nights requirement
+- review volume and review rate
+- host listing count
+- annual availability
+
+It outputs a classification prediction and per-class probability distribution.
+
+## Notes
+
+This project is intentionally lightweight and easy to extend. It is ideal for local demos, ML portfolio projects, and small business analytics prototypes.
+
+## License
+
+This project is provided for educational and portfolio use.
+
+## Author
+
+Gohar Malghani
+
+## Project Status
+
+The repository has been modernized with a cleaner interface and a more polished project presentation for GitHub.
+
+![Final project preview](https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1400&q=80)
